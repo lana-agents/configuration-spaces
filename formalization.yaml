@@ -1,0 +1,82 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+# formalization.yaml (v0.4): repo-root metadata for this formalization,
+# following https://github.com/mathlib-initiative/formalization.yaml
+
+version: "v0.4"
+
+project:
+  name: "configuration-spaces"
+  description: >-
+    Planned Lean 4 / Mathlib formalization of ordered configuration spaces of curves
+    Conf_n(X) = Xⁿ minus the pairwise diagonals: the symmetric-group action, the forgetful maps
+    Conf_{n+1}(X) → Conf_n(X), their fibres as punctured curves, and the resulting topological and étale
+    fundamental-group exact sequences (including the Fadell–Neuwirth sequence), with the functoriality needed
+    by anabelian reconstruction arguments (Topics in Absolute Anabelian Geometry II).
+    The repository is currently an empty scaffold: no definitions or theorems yet.
+  authors:
+    - "Claude (Anthropic)"
+    - "LANA Project"
+  responsible_maintainers:
+    - "Christian Merten"
+  license: "Apache-2.0"
+
+sources:
+  - title: "Configuration spaces"
+    authors: ["Edward Fadell", "Lee Neuwirth"]
+    type: "article"
+    note: "1962. Planned reference (README, Established sources); nothing is formalised yet."
+  - title: "Revêtements étales et groupe fondamental (SGA 1)"
+    authors: ["Alexander Grothendieck"]
+    type: "book"
+    note: "Planned reference (README, Established sources); nothing is formalised yet."
+  - title: "The algebraic and anabelian geometry of configuration spaces"
+    authors: ["Shinichi Mochizuki", "Akio Tamagawa"]
+    type: "article"
+    location: "Hokkaido Math. J. 37 (2008), 75-131"
+    note: "Planned reference (README, Established sources); nothing is formalised yet."
+
+related_formalizations:
+  - id: "https://github.com/lana-agents/iut"
+    relationship: "other"
+    note: "Intended as an input to the anabelian machinery of iut; not used by it."
+  - id: "https://github.com/lana-agents/belyi"
+    relationship: "other"
+    note: "Separate from the Belyi-map existence theorem formalised there."
+
+classification:
+  arxiv: ["math.AG", "math.AT"]
+  msc2020: ["55R80", "14H30"]
+
+status:
+  scope: "not started (scaffold only)"
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+  main_results: []
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["claude-opus-5-5"]
+      framework: "Claude Code"
+      tool_setup: >-
+        orchestra for running the agents, taxis for project management, and Claude (Claude Code) as the
+        coding agent; Lean/Lake builds with `lake build --wfail`.
+      prompting_notes: >-
+        Human input consisted of high-level task descriptions and scope decisions.
+  notes: >-
+    Agents were run with orchestra; project management (issues, status) was done in taxis;
+    Claude was the coding agent.
+
+fidelity:
+  divergences: "None yet: nothing has been formalised."
+
+review:
+  status: "agent-reviewed"
+  reviewers: ["Claude (Anthropic)"]
+  notes: >-
+    The formalization has only been reviewed by Claude; it has not been reviewed by a human.
+    The repository is an empty scaffold (a placeholder module with no declarations), so there is
+    nothing to check yet.
+
+acknowledgements: "Built on Mathlib (Apache-2.0)."

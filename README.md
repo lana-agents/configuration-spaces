@@ -2,6 +2,17 @@
 
 Ordered configuration spaces of curves and their fundamental-group sequences.
 
+## Status
+
+**Not started.** The repository is the initial project scaffold (a single commit,
+2026-07-20). The library `ConfigurationSpaces` contains only the placeholder module
+`ConfigurationSpaces/Basic.lean`, which has no declarations: there are no definitions or theorems yet
+(and so no `sorry`, `axiom` or `admit`). Everything under *Goals* below is planned, not
+formalised.
+
+No lana-agents repository depends on this one: `iut` and its pinned lana-agents
+dependencies do not `require` it.
+
 ## Goals
 
 Formalise ordered configuration spaces of curves
@@ -24,11 +35,13 @@ This supplies independently established configuration-space infrastructure used 
 
 ## Related repositories
 
-An independently established input to the anabelian machinery used by `iut`.
+Intended as an input to the anabelian machinery of `iut`; not used by it. Separate
+from the Belyi-map existence theorem in `belyi`.
 
 ## Layout
 
-Lean 4 project pinned to `leanprover/lean4:v4.32.0` with Mathlib at `v4.32.0`.
+Lean 4 project pinned to `leanprover/lean4:v4.32.0` with Mathlib at `v4.32.0`
+(commit `81a5d25`), its only direct dependency.
 Library sources live under `ConfigurationSpaces/`, and every file must be imported from
 the root module `ConfigurationSpaces.lean`.
 

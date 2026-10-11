@@ -1,3 +1,4 @@
+import ConfigurationSpaces.AlgebraicGeometry.Basic
 import ConfigurationSpaces.Topology.Basic
 import ConfigurationSpaces.Topology.CubeLifting
 import ConfigurationSpaces.Topology.FadellNeuwirth

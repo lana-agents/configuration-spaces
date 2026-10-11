@@ -1,6 +1,3 @@
-/-
-Copyright (c) 2026 LANA Project. All rights reserved.
-Released under Apache 2.0 license as described in the file LICENSE.
-Authors: LANA Project
--/
-import ConfigurationSpaces.Basic
+import ConfigurationSpaces.Topology.Basic
+import ConfigurationSpaces.Topology.CubeLifting
+import ConfigurationSpaces.Topology.LocallyTrivial

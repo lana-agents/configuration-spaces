@@ -4,11 +4,44 @@ Ordered configuration spaces of curves and their fundamental-group sequences.
 
 ## Status
 
-**Not started.** The repository is the initial project scaffold (a single commit,
-2026-07-20). The library `ConfigurationSpaces` contains only the placeholder module
-`ConfigurationSpaces/Basic.lean`, which has no declarations: there are no definitions or theorems yet
-(and so no `sorry`, `axiom` or `admit`). Everything under *Goals* below is planned, not
-formalised.
+**Topological layer complete; algebraic layer in progress.** Everything listed below is proved
+without `sorry`, `admit` or new axioms (only `propext`, `Classical.choice`, `Quot.sound`). The
+lemma-level plan and its status are in [`Blueprint.md`](Blueprint.md).
+
+Formalised (`ConfigurationSpaces/Topology/`):
+
+* `Conf n X` (injective `n`-tuples, open in `Xⁿ` for Hausdorff `X`), the free action of
+  `Equiv.Perm (Fin n)` by homeomorphisms, the forgetful maps `Conf.forget`, their equivariance,
+  the identification `Conf (n+1) X ≃ₜ {(y, p) | p ∉ range y}` and of the fibre over `y` with
+  `X ∖ {y₀, …, yₙ₋₁}`, and functoriality for injective maps, embeddings and homeomorphisms
+  (`Basic.lean`).
+* Locally trivial maps (`IsLocallyTrivial`) have the homotopy lifting property for all cubes
+  (they are Serre fibrations), in particular path and square lifting (`CubeLifting.lean`).
+* For a locally trivial `p : E → B` with fibre `F` through `e₀`: `ker p_* = range i_*` in
+  `π₁(E, e₀)`; `p_*` is surjective if `F` is path-connected; `i_*` is injective if
+  `π₂(B, p e₀)` is trivial (`FundamentalGroupSequence.lean`).
+* Point-pushing homeomorphisms in complete real normed spaces and in Hausdorff topological
+  manifolds modelled on finite-dimensional real normed spaces, and simultaneous pushes of
+  finitely many points (`Push.lean`); complements of finite sets in connected manifolds of
+  dimension `> 1` are path-connected (`Punctured.lean`).
+* **Fadell–Neuwirth**: for `X` Hausdorff with local pushes (e.g. any such manifold, any Riemann
+  surface) `Conf.forget : Conf (n+1) X → Conf n X` is locally trivial; for `X` a connected
+  manifold of dimension `> 1` (e.g. a connected surface) the sequence
+  `π₁(X ∖ {y₀,…,yₙ₋₁}) → π₁(Conf (n+1) X) → π₁(Conf n X) → 1` is exact, and the first map is
+  injective when `π₂(Conf n X)` is trivial (`Conf.fadellNeuwirth_range_eq_ker`,
+  `Conf.fadellNeuwirth_surjective`, `Conf.fadellNeuwirth_injective` in `FadellNeuwirth.lean`),
+  together with naturality of the induced maps on `π₁` for injective maps and for the
+  symmetric-group action.
+
+Not formalised:
+
+* The algebraic layer (configuration schemes `Conf_n(X/S)` as open subschemes of fibre powers) is
+  being added; see `Blueprint.md`, section A.
+* The étale fundamental-group (homotopy) exact sequence for configuration spaces of algebraic
+  curves: it needs the étale homotopy exact sequence (SGA 1, X and XIII), which is far beyond
+  what `lana-agents/pi1` currently provides (the Galois-category definition of `π₁ᵉᵗ`).
+* Asphericity of `Conf n X` (`π₂ = 0`) for surfaces other than the sphere and projective plane;
+  the injectivity statement is proved under this hypothesis.
 
 No lana-agents repository depends on this one: `iut` and its pinned lana-agents
 dependencies do not `require` it.

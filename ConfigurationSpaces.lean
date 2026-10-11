@@ -1,5 +1,7 @@
 import ConfigurationSpaces.Topology.Basic
 import ConfigurationSpaces.Topology.CubeLifting
+import ConfigurationSpaces.Topology.FadellNeuwirth
 import ConfigurationSpaces.Topology.FundamentalGroupSequence
 import ConfigurationSpaces.Topology.LocallyTrivial
+import ConfigurationSpaces.Topology.Punctured
 import ConfigurationSpaces.Topology.Push

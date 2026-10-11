@@ -225,4 +225,38 @@ theorem fadellNeuwirth_injective (h2 : Subsingleton (π_ 2 (Conf n X) (forget x�
 
 end FadellNeuwirth
 
+/-! ### Functoriality on fundamental groups -/
+
+section Functoriality
+
+variable {Y : Type*} [TopologicalSpace Y]
+
+/-- The maps induced on fundamental groups by `forget` commute with those induced by a continuous
+injection `f : X → Y`. -/
+theorem fundamentalGroup_map_forget_comp_map (f : C(X, Y)) (hf : Injective f)
+    (x₀ : Conf (n + 1) X) :
+    (FundamentalGroup.map forget (map f hf x₀)).comp (FundamentalGroup.map (map f hf) x₀) =
+      (FundamentalGroup.map (map f hf) (forget x₀)).comp (FundamentalGroup.map forget x₀) := by
+  ext g
+  obtain ⟨γ⟩ := g
+  rfl
+
+/-- The maps induced on fundamental groups by `forget` are equivariant for the symmetric groups:
+`forget ∘ (extendPerm σ • ·) = (σ • ·) ∘ forget`. -/
+theorem fundamentalGroup_map_forget_comp_smul (σ : Equiv.Perm (Fin n)) (x₀ : Conf (n + 1) X) :
+    (FundamentalGroup.map forget (extendPerm σ • x₀)).comp
+        (FundamentalGroup.map ⟨(extendPerm σ • ·), continuous_smul _⟩ x₀) =
+      (FundamentalGroup.mapOfEq (⟨(σ • ·), continuous_smul σ⟩ : C(Conf n X, Conf n X))
+          (forget_smul σ x₀).symm).comp (FundamentalGroup.map forget x₀) := by
+  ext g
+  obtain ⟨γ⟩ := g
+  simp only [MonoidHom.comp_apply, FundamentalGroup.mapOfEq_apply]
+  change Path.Homotopic.Quotient.mk _ = Path.Homotopic.Quotient.mk _
+  congr 1
+  apply Path.ext
+  funext t
+  exact forget_smul σ (γ t)
+
+end Functoriality
+
 end Conf

@@ -12,7 +12,9 @@ project:
     Conf_{n+1}(X) → Conf_n(X), their fibres as punctured curves, and the resulting topological and étale
     fundamental-group exact sequences (including the Fadell–Neuwirth sequence), with the functoriality needed
     by anabelian reconstruction arguments (Topics in Absolute Anabelian Geometry II).
-    The repository is currently an empty scaffold: no definitions or theorems yet.
+    The topological layer is complete: configuration spaces, symmetric-group action, forgetful maps
+    and fibres, homotopy lifting for locally trivial maps, the fundamental-group sequence of a
+    locally trivial map, and the Fadell–Neuwirth fibration and exact sequence for manifolds.
   authors:
     - "Claude (Anthropic)"
     - "LANA Project"
@@ -24,16 +26,16 @@ sources:
   - title: "Configuration spaces"
     authors: ["Edward Fadell", "Lee Neuwirth"]
     type: "article"
-    note: "1962. Planned reference (README, Established sources); nothing is formalised yet."
+    note: "1962. Local triviality of the forgetful maps and the fundamental-group sequence (Conf.isLocallyTrivial_forget, Conf.fadellNeuwirth_*)."
   - title: "Revêtements étales et groupe fondamental (SGA 1)"
     authors: ["Alexander Grothendieck"]
     type: "book"
-    note: "Planned reference (README, Established sources); nothing is formalised yet."
+    note: "Reference for the étale theory; the étale homotopy exact sequence is not formalised."
   - title: "The algebraic and anabelian geometry of configuration spaces"
     authors: ["Shinichi Mochizuki", "Akio Tamagawa"]
     type: "article"
     location: "Hokkaido Math. J. 37 (2008), 75-131"
-    note: "Planned reference (README, Established sources); nothing is formalised yet."
+    note: "Reference for configuration spaces of curves; the anabelian results are not formalised."
 
 related_formalizations:
   - id: "https://github.com/lana-agents/iut"
@@ -48,11 +50,54 @@ classification:
   msc2020: ["55R80", "14H30"]
 
 status:
-  scope: "not started (scaffold only)"
+  scope: >-
+    Topological layer complete (configuration spaces, symmetric-group action, forgetful maps and
+    fibres, Serre-fibration property of locally trivial maps, fundamental-group sequence, Fadell–Neuwirth
+    fibration and exact sequence for manifolds); algebraic layer in progress; étale sequence not formalised.
   sorry_count: 0
   sorry_in_definitions: 0
-  axioms: []
-  main_results: []
+  axioms: ["propext", "Classical.choice", "Quot.sound"]
+  main_results:
+    - declaration: "Conf.isLocallyTrivial_forget"
+      file: "ConfigurationSpaces/Topology/FadellNeuwirth.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Conf.fadellNeuwirth_range_eq_ker"
+      file: "ConfigurationSpaces/Topology/FadellNeuwirth.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Conf.fadellNeuwirth_surjective"
+      file: "ConfigurationSpaces/Topology/FadellNeuwirth.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Conf.fadellNeuwirth_injective"
+      file: "ConfigurationSpaces/Topology/FadellNeuwirth.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "IsLocallyTrivial.exists_lift_homotopy"
+      file: "ConfigurationSpaces/Topology/CubeLifting.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "FundamentalGroup.ker_map_eq_range_map_fiberIncl"
+      file: "ConfigurationSpaces/Topology/FundamentalGroupSequence.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "FundamentalGroup.map_fiberIncl_injective"
+      file: "ConfigurationSpaces/Topology/FundamentalGroupSequence.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "ChartedSpace.isPathConnected_compl_of_finite"
+      file: "ConfigurationSpaces/Topology/Punctured.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
 
 automation:
   methods:
@@ -69,14 +114,17 @@ automation:
     Claude was the coding agent.
 
 fidelity:
-  divergences: "None yet: nothing has been formalised."
+  divergences: >-
+    Fadell–Neuwirth is proved for Hausdorff topological manifolds modelled on a finite-dimensional real
+    normed space (more generally for Hausdorff spaces with local point-pushing homeomorphisms); the
+    left-exactness (injectivity of π₁ of the fibre) is stated under the hypothesis π₂(Conf n X) = 0,
+    which is not proved. The étale version is not formalised.
 
 review:
   status: "agent-reviewed"
   reviewers: ["Claude (Anthropic)"]
   notes: >-
     The formalization has only been reviewed by Claude; it has not been reviewed by a human.
-    The repository is an empty scaffold (a placeholder module with no declarations), so there is
-    nothing to check yet.
+    Statements were checked against Fadell–Neuwirth (1962) by the agent.
 
 acknowledgements: "Built on Mathlib (Apache-2.0)."

@@ -1,3 +1,4 @@
 import ConfigurationSpaces.Topology.Basic
 import ConfigurationSpaces.Topology.CubeLifting
+import ConfigurationSpaces.Topology.FundamentalGroupSequence
 import ConfigurationSpaces.Topology.LocallyTrivial

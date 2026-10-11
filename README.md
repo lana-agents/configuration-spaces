@@ -4,7 +4,10 @@ Ordered configuration spaces of curves and their fundamental-group sequences.
 
 ## Status
 
-**Topological and algebraic layers complete; étale sequence not formalised.** Everything listed below is proved
+**Topological and algebraic layers complete, including the full (left-exact) Fadell–Neuwirth
+sequence for surfaces covered by plane domains (in particular once-punctured elliptic curves and
+punctured complex planes); étale sequence not formalised (only its Galois-theoretic surjectivity
+criterion).** Everything listed below is proved
 without `sorry`, `admit` or new axioms (only `propext`, `Classical.choice`, `Quot.sound`). The
 lemma-level plan and its status are in [`Blueprint.md`](Blueprint.md).
 
@@ -32,6 +35,33 @@ Formalised (`ConfigurationSpaces/Topology/`):
   `Conf.fadellNeuwirth_surjective`, `Conf.fadellNeuwirth_injective` in `FadellNeuwirth.lean`),
   together with naturality of the induced maps on `π₁` for injective maps and for the
   symmetric-group action; the case of Riemann surfaces is `Conf.fadellNeuwirth_complex`.
+* `π₂` (Mathlib's `π_ 2`, homotopy classes of maps `I² → X` sending `∂I²` to the base point,
+  relative to `∂I²`) (`SecondHomotopy.lean`): it is trivial for convex subsets of real normed
+  spaces and transfers along retracts/homeomorphisms; a covering map `E → X` with
+  `π₂(E) = 0` has `π₂(X) = 0` (`IsCoveringMap.subsingleton_homotopyGroup_two`); for a locally
+  trivial `p : E → B` with fibre `F`, `π₂(F) = π₂(B) = 0` implies `π₂(E) = 0`
+  (`IsLocallyTrivial.subsingleton_homotopyGroup_two`, exactness of `π₂(F) → π₂(E) → π₂(B)`).
+* **Asphericity in degree 2** (`Aspherical.lean`): if `X` is Hausdorff with local pushes and
+  `π₂(X ∖ S) = 0` for every finite `S` (`PuncturedAspherical₂ X`), then `π₂(Conf n X) = 0` for all
+  `n` (`Conf.subsingleton_pi_two`, induction along the Fadell–Neuwirth fibrations), hence
+  `1 → π₁(X ∖ {y₀,…,yₙ₋₁}) → π₁(Conf (n+1) X) → π₁(Conf n X) → 1` is exact for connected Riemann
+  surfaces with this property (`Conf.fadellNeuwirth_exact_complex`).
+* **Plane domains** (`PlanarDomain.lean`): every open `U ⊆ ℂ` has `π₂(U) = 0` at every base point
+  (`Complex.subsingleton_pi_two_of_isOpen`): a sphere lies in a connected component `Ω`, which is
+  `ℂ` (convex), `ℂ ∖ {a}` (covered by `exp`), or omits two points and is then covered by the disc
+  by the Koebe uniformisation theorem of `lana-agents/oka`
+  (`Uniformization.PlaneData.exists_covering`; the initial covering is built from the modular
+  `j`-function, `PlaneUniformization.exists_covering`). Consequently `PuncturedAspherical₂ X`
+  holds for every T₁ space `X` with a surjective covering map from a space embedding openly in
+  `ℂ` (`puncturedAspherical₂_of_isCoveringMap`), and for such Hausdorff connected `X`
+  `π₂(Conf n X) = 0` and the Fadell–Neuwirth sequence is exact on the left as well
+  (`Conf.subsingleton_pi_two_of_isCoveringMap`, `Conf.fadellNeuwirth_exact_of_isCoveringMap`;
+  the `ℂ`-atlas of `X` is constructed from the covering). Concrete instances, with no further
+  hypotheses: connected open subsets of `ℂ` (`Conf.fadellNeuwirth_exact_of_isOpen`; e.g. `ℂ`
+  minus finitely many points, i.e. `ℙ¹` minus `≥ 1` points, punctured discs), complex tori
+  `ℂ/Λ` (`PeriodPair.Torus`, `Conf.fadellNeuwirth_exact_torus`) and **once-punctured elliptic
+  curves** `E ∖ {O} = (ℂ/Λ) ∖ {0}` (`PeriodPair.PuncturedTorus`,
+  `Conf.subsingleton_pi_two_puncturedTorus`, `Conf.fadellNeuwirth_exact_puncturedTorus`).
 
 Formalised (`ConfigurationSpaces/AlgebraicGeometry/Basic.lean`), for `X` separated over `S`:
 
@@ -45,13 +75,42 @@ Formalised (`ConfigurationSpaces/AlgebraicGeometry/Basic.lean`), for `X` separat
   pairwise distinct points (`ConfScheme.homEquiv`, `ConfScheme.homEquivSpec`), and the fibre of
   `forget` over such a point `z` is `X ∖ {z₀,…,zₙ₋₁}` on points (`ConfScheme.fiberEquiv`).
 
-Not formalised:
+Formalised (`ConfigurationSpaces/Etale/GaloisSurjective.lean`): the Galois-theoretic half of
+SGA 1 V.6.9: for a fibre functor `F` on a Galois category `C` and `H : D ⥤ C` with `H ⋙ F` a
+fibre functor, if `H` preserves connected objects then `Aut F → Aut (H ⋙ F)` is surjective
+(`PreGaloisCategory.toAut_comp_surjective`).
 
-* The étale fundamental-group (homotopy) exact sequence for configuration spaces of algebraic
-  curves: it needs the étale homotopy exact sequence (SGA 1, X and XIII), which is far beyond
-  what `lana-agents/pi1` currently provides (the Galois-category definition of `π₁ᵉᵗ`).
-* Asphericity of `Conf n X` (`π₂ = 0`) for surfaces other than the sphere and projective plane;
-  the injectivity statement is proved under this hypothesis.
+Scope of the asphericity results: they cover exactly the Hausdorff spaces `X` that admit a
+surjective covering map from a space embedding openly in `ℂ` and are given together with that
+covering. By the uniformisation theorem these are all Riemann surfaces other than `ℙ¹` (and
+`π₂(ℙ¹) ≠ 0`), but general uniformisation is not formalised: for a hyperbolic Riemann surface
+other than the concrete ones above (e.g. a compact curve of genus `≥ 2`, or an abstract
+`ChartedSpace ℂ X`), the covering `𝔻 → X` (or `ℍ → X`) must be supplied as a hypothesis. Real
+surfaces that are not Riemann surfaces (e.g. non-orientable ones, surfaces with boundary) are not
+treated.
+
+Not formalised (out of scope; reasons):
+
+* **The étale Fadell–Neuwirth sequence** `π₁ᵉᵗ(X_ȳ ∖ {y₀,…,yₙ₋₁}) → π₁ᵉᵗ(Conf_{n+1} X) →
+  π₁ᵉᵗ(Conf_n X) → 1` for configuration schemes of curves. Exactness in the middle and on the
+  left needs the homotopy exact sequence for smooth, non-proper morphisms with geometrically
+  connected fibres, i.e. SGA 1 XIII 4.1–4.3 (tame fundamental groups of complements of relative
+  étale divisors in smooth proper curves) together with SGA 1 X.1.4 (homotopy exact sequence for
+  proper separable morphisms) and, over `ℂ`, the comparison with the topological sequence via the
+  Riemann existence theorem (SGA 1 XII); none of this is in Mathlib or `lana-agents/pi1`. Even
+  the surjectivity `π₁ᵉᵗ(Conf_{n+1} X) ↠ π₁ᵉᵗ(Conf_n X)` (SGA 1 IX.3.4 / V.6.9 for a universally
+  open morphism with geometrically connected fibres) needs, beyond
+  `PreGaloisCategory.toAut_comp_surjective` and Mathlib's `GeometricallyConnected` API:
+  (1) functoriality of `π₁ᵉᵗ` in `pi1`: the isomorphism `f^* ⋙ fiber ξ ≅ fiber (ξ ≫ f)` and the
+  `FiberFunctor` structure on `f^* ⋙ fiber ξ` (not provided by `pi1`, which defines `π₁ᵉᵗ(ξ)` as
+  `Aut (fiber ξ)` for a single scheme); (2) connected objects of the Galois category of finite
+  étale `X`-schemes are exactly those with connected total space (not in `pi1`);
+  (3) universal openness of `Conf_{n+1} X → Conf_n X`, a base change of `X → S` composed with an
+  open immersion — for smooth (flat, locally finitely presented) `X → S` this is EGA IV 2.4.6,
+  not in Mathlib; (4) the scheme-theoretic fibre of `forget` over `Spec K → Conf_n X` as the open
+  subscheme of `X_K` complementary to `n` rational points, and its connectedness for
+  geometrically irreducible `X → S` of relative dimension `≥ 1` (this repository describes the
+  fibres only on field-valued points, `ConfScheme.fiberEquiv`).
 
 No lana-agents repository depends on this one: `iut` and its pinned lana-agents
 dependencies do not `require` it.
@@ -84,7 +143,12 @@ from the Belyi-map existence theorem in `belyi`.
 ## Layout
 
 Lean 4 project pinned to `leanprover/lean4:v4.32.0` with Mathlib at `v4.32.0`
-(commit `81a5d25`), its only direct dependency.
+(commit `81a5d25`). The second direct dependency is
+[`lana-agents/oka`](https://github.com/lana-agents/oka) pinned at commit `043c179` (the commit
+pinned by `orbicurve-cores`), for the plane uniformisation theorem used in `PlanarDomain.lean`;
+it pulls in `lana-agents/heights` at `3539e2a` (same Mathlib commit). Only the 16 `oka` and 7
+`heights` modules imported by `Oka.Uniformization.LatticeComplement` are built (about 190 MB for
+both packages including sources and build output).
 Library sources live under `ConfigurationSpaces/`, and every file must be imported from
 the root module `ConfigurationSpaces.lean`.
 

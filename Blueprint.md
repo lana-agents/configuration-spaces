@@ -80,7 +80,7 @@ Let `p : E → B` be continuous and locally trivial, `e₀ : E`, `F = p⁻¹{p e
   (`Conf.isPathConnected_fiber`).
 * **F3** [done] Fadell–Neuwirth sequence: for such `X` (e.g. a connected surface, any Riemann surface)
   `π₁(X ∖ {y₁,…,yₙ}) → π₁(Conf (n+1) X) → π₁(Conf n X) → 1` is exact, and the first map is
-  injective when `π₂(Conf n X)` is trivial (`Conf.puncturedToConf`, `Conf.fadellNeuwirth_range_eq_ker`,
+  injective when `π₂(Conf n X)` is trivial — unconditionally so for the surfaces of **U** — (`Conf.puncturedToConf`, `Conf.fadellNeuwirth_range_eq_ker`,
   `Conf.fadellNeuwirth_surjective`, `Conf.fadellNeuwirth_injective`; the fibre is identified with
   the punctured manifold by `FundamentalGroup.mulEquivOfHomeomorph`).
 
@@ -105,13 +105,66 @@ For `X : Over S` with separated structure morphism (namespace `AlgebraicGeometry
   sections (`range_toProd`); on field-valued points the fibre of `forget` over `z` is
   `X ∖ {z₀,…,zₙ₋₁}` (`fiberEquiv`).
 
+## H. Second homotopy groups — `Topology/SecondHomotopy.lean`, `Topology/Aspherical.lean`
+
+`π₂` is Mathlib's `π_ 2 X x` (classes of maps `I² → X` with `∂I² ↦ x`, rel `∂I²`).
+
+* **H1** [done] `π_ n` of a retract / homeomorphic space / convex subset of a real normed space /
+  subsingleton space (`HomotopyGroup.subsingleton_of_retract`, `subsingleton_of_homeomorph`,
+  `subsingleton_of_convex`, `subsingleton_of_normedSpace`, `subsingleton_of_subsingleton`).
+* **H2** [done] Coverings: `p : E → X` covering, `π₂(E, e) = 0` ⇒ `π₂(X, p e) = 0`
+  (`IsCoveringMap.subsingleton_homotopyGroup_two`; lift the square by Mathlib's
+  `IsCoveringMap.liftHomotopy`, the boundary goes to the discrete fibre, project a null-homotopy).
+* **H3** [done] Exactness of `π₂(F) → π₂(E) → π₂(B)` in the form `π₂(F) = π₂(B) = 0 ⇒ π₂(E) = 0` for
+  locally trivial `p` (`IsLocallyTrivial.subsingleton_homotopyGroup_two`): lift a null-homotopy
+  of `p ∘ γ` (**L4**), reparametrise the five non-bottom faces of the cube by the radial
+  projection from `(-1, ½, ½)` (`RadialProjection.proj`, `proj_mem`, `proj_of_mem_boundary`)
+  to a sphere in the fibre, and use the straight-line homotopy inside the cube.
+* **H4** [done] `PuncturedAspherical₂ X` (`π₂(X ∖ S) = 0` for finite `S`) and local pushes ⇒
+  `π₂(Conf n X) = 0` (`Conf.subsingleton_pi_two`, induction with **F1**, **H3**); the
+  Fadell–Neuwirth sequence is then exact on the left
+  (`Conf.fadellNeuwirth_injective_of_puncturedAspherical₂`, `Conf.fadellNeuwirth_exact_complex`).
+
+## U. Plane domains and their quotients — `Topology/PlanarDomain.lean` (uses `lana-agents/oka`)
+
+* **U1** [done] An open connected `Ω ⊆ ℂ` omitting two points `a ≠ b` is covered by the unit disc
+  (`PlaneUniformization.exists_covering`): the input covering of `oka`'s Koebe uniformisation
+  theorem `Uniformization.PlaneData.exists_covering` is `T⁻¹ ∘ j ∘ C⁻¹ ∘ mob t` with `T` affine,
+  `T{a, b} = {j(i), j(ρ)}` (adapted from `oka`'s `Uniformization.LatticeData`).
+* **U2** [done] `π₂(U, u) = 0` for every open `U ⊆ ℂ` (`Complex.subsingleton_pi_two_of_isOpen`;
+  cases `Ω = ℂ`, `Ω = ℂ ∖ {a}` via `exp`, and **U1**, for the component `Ω` of `u`), and for
+  every space embedding openly in `ℂ`.
+* **U3** [done] A T₁ space with a surjective covering from a space embedding openly in `ℂ` is
+  `PuncturedAspherical₂` (`puncturedAspherical₂_of_isCoveringMap`) and, if Hausdorff, a
+  `ℂ`-manifold (`chartedSpaceOfIsCoveringMap`) with local pushes; hence `π₂(Conf n X) = 0` and the
+  short exact Fadell–Neuwirth sequence (`Conf.subsingleton_pi_two_of_isCoveringMap`,
+  `Conf.fadellNeuwirth_exact_of_isCoveringMap`).
+* **U4** [done] Instances: connected open subsets of `ℂ` (`Conf.fadellNeuwirth_exact_of_isOpen`),
+  complex tori `PeriodPair.Torus` (`Conf.fadellNeuwirth_exact_torus`) and once-punctured elliptic
+  curves `PeriodPair.PuncturedTorus = (ℂ/Λ) ∖ {0}`, covered by `ℂ ∖ Λ`
+  (`Conf.subsingleton_pi_two_puncturedTorus`, `Conf.fadellNeuwirth_exact_puncturedTorus`).
+* Scope: all Riemann surfaces other than `ℙ¹` are of this form by uniformisation, but general
+  uniformisation is not formalised, so for other hyperbolic surfaces (e.g. compact of genus
+  `≥ 2`) the covering must be supplied.
+
+## E. Étale layer — `ConfigurationSpaces/Etale/GaloisSurjective.lean`
+
+* **E1** [done] SGA 1 V.6.9 (Galois-theoretic part): `H : D ⥤ C` preserving connected objects with
+  `H ⋙ F` a fibre functor ⇒ `Aut F → Aut (H ⋙ F)` surjective
+  (`PreGaloisCategory.toAut_comp_surjective`).
+* **E2** [out of scope] Surjectivity `π₁ᵉᵗ(Conf_{n+1}) ↠ π₁ᵉᵗ(Conf_n)`: needs (1) functoriality of
+  `π₁ᵉᵗ` in `pi1` (`f^* ⋙ fiber ξ ≅ fiber (ξ ≫ f)`, fibre-functor structure on `f^* ⋙ fiber ξ`);
+  (2) connected objects of `FEt(X)` = connected finite étale `X`-schemes (not in `pi1`);
+  (3) universal openness of `forget` (EGA IV 2.4.6 for smooth `X → S`, not in Mathlib);
+  (4) scheme-theoretic fibres of `forget` and their geometric connectedness.
+* **E3** [out of scope] Exactness in the middle and on the left: SGA 1 XIII 4.1–4.3 (tame
+  homotopy exact sequence for complements of relative étale divisors), SGA 1 X.1.4, and over `ℂ`
+  the Riemann existence theorem (SGA 1 XII); none available in Mathlib or `pi1`.
+
 ## Out of scope (with reasons)
 
 * **F4** [done] Riemann surfaces (`ChartedSpace ℂ X`): `Conf.fadellNeuwirth_complex`.
 
-* The étale Fadell–Neuwirth / homotopy exact sequence: needs the étale homotopy exact sequence
-  for proper/smooth morphisms with geometrically connected fibres (SGA 1 X, XIII), far beyond
-  the current `lana-agents/pi1` (which provides the Galois-category definition of `π₁ᵉᵗ`).
-* Asphericity of `Conf n X` for hyperbolic surfaces (needs `π₂` of punctured surfaces, i.e.
-  uniformisation / classification); the injectivity statement **F3** is therefore stated under the
-  hypothesis `π₂(Conf n X) = 0`.
+* The étale Fadell–Neuwirth / homotopy exact sequence: see **E2**, **E3**.
+* Asphericity for hyperbolic surfaces not given with a covering by a plane domain (general
+  uniformisation), and for real surfaces that are not Riemann surfaces: see **U4**.

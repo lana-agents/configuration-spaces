@@ -16,3 +16,10 @@ rev = "v4.32.0"
 
 [[lean_lib]]
 name = "ConfigurationSpaces"
+
+# Uniformisation of plane domains (Koebe iteration) and the modular covering used to prove
+# that open subsets of `ℂ` have trivial `π₂` (`ConfigurationSpaces/Topology/PlanarDomain.lean`).
+[[require]]
+name = "oka"
+git = "https://github.com/lana-agents/oka.git"
+rev = "043c179ac869ad3cdffd1caca3873367f668f4f3"

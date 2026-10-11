@@ -1,8 +1,12 @@
 import ConfigurationSpaces.AlgebraicGeometry.Basic
+import ConfigurationSpaces.Etale.GaloisSurjective
+import ConfigurationSpaces.Topology.Aspherical
 import ConfigurationSpaces.Topology.Basic
 import ConfigurationSpaces.Topology.CubeLifting
 import ConfigurationSpaces.Topology.FadellNeuwirth
 import ConfigurationSpaces.Topology.FundamentalGroupSequence
 import ConfigurationSpaces.Topology.LocallyTrivial
+import ConfigurationSpaces.Topology.PlanarDomain
 import ConfigurationSpaces.Topology.Punctured
 import ConfigurationSpaces.Topology.Push
+import ConfigurationSpaces.Topology.SecondHomotopy

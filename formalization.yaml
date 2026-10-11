@@ -17,7 +17,11 @@ project:
     locally trivial map, and the Fadell–Neuwirth fibration and exact sequence for manifolds. The
     algebraic layer provides configuration schemes of separated S-schemes (open subschemes of fibre
     powers), the symmetric-group action, forgetful morphisms, Conf_{n+1} as an open subscheme of
-    Conf_n ×_S X, and field-valued points; the étale sequence is not formalised.
+    Conf_n ×_S X, and field-valued points. Second homotopy groups: pi_2 vanishes for open subsets
+    of C (via the Koebe plane uniformisation theorem of lana-agents/oka) and for spaces covered by
+    them, and pi_2(Conf_n X) = 0 for such surfaces, giving the short exact Fadell–Neuwirth sequence
+    for plane domains, complex tori and once-punctured elliptic curves. The étale sequence is not
+    formalised; only the Galois-theoretic surjectivity criterion (SGA 1 V.6.9) is.
   authors:
     - "Claude (Anthropic)"
     - "LANA Project"
@@ -44,6 +48,9 @@ related_formalizations:
   - id: "https://github.com/lana-agents/iut"
     relationship: "other"
     note: "Intended as an input to the anabelian machinery of iut; not used by it."
+  - id: "https://github.com/lana-agents/oka"
+    relationship: "other"
+    note: "Dependency (pinned at 043c179): the plane uniformisation theorem (Koebe iteration, Uniformization.PlaneData.exists_covering) and the modular covering used for pi_2 of plane domains."
   - id: "https://github.com/lana-agents/belyi"
     relationship: "other"
     note: "Separate from the Belyi-map existence theorem formalised there."
@@ -57,8 +64,10 @@ status:
     Topological layer complete (configuration spaces, symmetric-group action, forgetful maps and
     fibres, Serre-fibration property of locally trivial maps, fundamental-group sequence, Fadell–Neuwirth
     fibration and exact sequence for manifolds); algebraic layer (configuration schemes, symmetric-group action,
-    forgetful morphisms, open-subscheme description of the fibres, field-valued points) complete; étale
-    homotopy sequence not formalised.
+    forgetful morphisms, open-subscheme description of the fibres, field-valued points) complete;
+    pi_2(Conf_n X) = 0 and the short exact Fadell–Neuwirth sequence for Hausdorff spaces covered by
+    open subsets of C (plane domains, complex tori, once-punctured elliptic curves); étale homotopy
+    sequence not formalised (Galois-theoretic surjectivity criterion only).
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -108,6 +117,46 @@ status:
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
       literature_dependencies: []
+    - declaration: "Conf.subsingleton_pi_two"
+      file: "ConfigurationSpaces/Topology/Aspherical.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "IsLocallyTrivial.subsingleton_homotopyGroup_two"
+      file: "ConfigurationSpaces/Topology/SecondHomotopy.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "IsCoveringMap.subsingleton_homotopyGroup_two"
+      file: "ConfigurationSpaces/Topology/SecondHomotopy.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Complex.subsingleton_pi_two_of_isOpen"
+      file: "ConfigurationSpaces/Topology/PlanarDomain.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Conf.fadellNeuwirth_exact_of_isCoveringMap"
+      file: "ConfigurationSpaces/Topology/PlanarDomain.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Conf.fadellNeuwirth_exact_of_isOpen"
+      file: "ConfigurationSpaces/Topology/PlanarDomain.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Conf.fadellNeuwirth_exact_puncturedTorus"
+      file: "ConfigurationSpaces/Topology/PlanarDomain.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "CategoryTheory.PreGaloisCategory.toAut_comp_surjective"
+      file: "ConfigurationSpaces/Etale/GaloisSurjective.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
     - declaration: "AlgebraicGeometry.ConfScheme.permAut"
       file: "ConfigurationSpaces/AlgebraicGeometry/Basic.lean"
       sorry_count: 0
@@ -147,8 +196,14 @@ fidelity:
   divergences: >-
     Fadell–Neuwirth is proved for Hausdorff topological manifolds modelled on a finite-dimensional real
     normed space (more generally for Hausdorff spaces with local point-pushing homeomorphisms); the
-    left-exactness (injectivity of π₁ of the fibre) is stated under the hypothesis π₂(Conf n X) = 0,
-    which is not proved. The étale version is not formalised. Configuration schemes are defined for separated
+    left-exactness (injectivity of π₁ of the fibre) is proved unconditionally for Hausdorff spaces
+    admitting a surjective covering map from a space embedding openly in ℂ (plane domains, complex
+    tori, once-punctured elliptic curves as quotients ℂ/Λ ∖ {0}); for other surfaces (e.g. compact
+    of genus ≥ 2, abstract Riemann surfaces) the uniformising covering must be supplied, since
+    general uniformisation is not formalised, and in general it is stated under the hypothesis
+    π₂(Conf n X) = 0. The étale version is not formalised beyond the Galois-theoretic surjectivity
+    criterion (functoriality of π₁ᵉᵗ, connected objects of FEt, EGA IV 2.4.6 and SGA 1 X/XIII are
+    missing). Configuration schemes are defined for separated
     S-schemes (so that the partial diagonals are closed); field-valued points are described for reduced
     one-point S-schemes.
 

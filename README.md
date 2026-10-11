@@ -4,7 +4,7 @@ Ordered configuration spaces of curves and their fundamental-group sequences.
 
 ## Status
 
-**Topological layer complete; algebraic layer in progress.** Everything listed below is proved
+**Topological and algebraic layers complete; étale sequence not formalised.** Everything listed below is proved
 without `sorry`, `admit` or new axioms (only `propext`, `Classical.choice`, `Quot.sound`). The
 lemma-level plan and its status are in [`Blueprint.md`](Blueprint.md).
 
@@ -31,12 +31,22 @@ Formalised (`ConfigurationSpaces/Topology/`):
   injective when `π₂(Conf n X)` is trivial (`Conf.fadellNeuwirth_range_eq_ker`,
   `Conf.fadellNeuwirth_surjective`, `Conf.fadellNeuwirth_injective` in `FadellNeuwirth.lean`),
   together with naturality of the induced maps on `π₁` for injective maps and for the
-  symmetric-group action.
+  symmetric-group action; the case of Riemann surfaces is `Conf.fadellNeuwirth_complex`.
+
+Formalised (`ConfigurationSpaces/AlgebraicGeometry/Basic.lean`), for `X` separated over `S`:
+
+* the configuration scheme `AlgebraicGeometry.ConfScheme X n`, the open subscheme of the fibre
+  power `Xⁿ` complementary to the closed partial diagonals `Δᵢⱼ = (prᵢ, prⱼ)⁻¹ Δ`;
+* the action `Equiv.Perm (Fin n) →* Aut (ConfScheme X n)` by `S`-automorphisms and the
+  equivariant forgetful morphisms `ConfScheme.forget`;
+* `Conf_{n+1}(X)` is the open subscheme of `Conf_n(X) ×_S X` complementary to the graphs of the
+  tautological sections (`ConfScheme.isOpenImmersion_toProd`, `ConfScheme.range_toProd`);
+* points with values in a field (more generally in a reduced one-point `S`-scheme) are tuples of
+  pairwise distinct points (`ConfScheme.homEquiv`, `ConfScheme.homEquivSpec`), and the fibre of
+  `forget` over such a point `z` is `X ∖ {z₀,…,zₙ₋₁}` on points (`ConfScheme.fiberEquiv`).
 
 Not formalised:
 
-* The algebraic layer (configuration schemes `Conf_n(X/S)` as open subschemes of fibre powers) is
-  being added; see `Blueprint.md`, section A.
 * The étale fundamental-group (homotopy) exact sequence for configuration spaces of algebraic
   curves: it needs the étale homotopy exact sequence (SGA 1, X and XIII), which is far beyond
   what `lana-agents/pi1` currently provides (the Galois-category definition of `π₁ᵉᵗ`).

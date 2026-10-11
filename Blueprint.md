@@ -86,18 +86,28 @@ Let `p : E → B` be continuous and locally trivial, `e₀ : E`, `F = p⁻¹{p e
 
 ## A. Algebraic layer — `ConfigurationSpaces/AlgebraicGeometry/Basic.lean`
 
-For a separated morphism `X → S` of schemes:
+For `X : Over S` with separated structure morphism (namespace `AlgebraicGeometry.ConfScheme`):
 
-* **A1** `Xⁿ` the `n`-fold fibre product (product in `Over S`); the closed partial diagonals
-  `Δᵢⱼ`; `Conf n X` the open subscheme complementary to `⋃_{i ≠ j} Δᵢⱼ`, with its open immersion
-  into `Xⁿ`.
-* **A2** The `Sₙ`-action on `Xⁿ` over `S` preserves `Conf n X`, giving a group homomorphism
-  `Perm (Fin n) → Aut_S(Conf n X)`.
-* **A3** The forgetful morphisms `Conf (n+1) X → Conf n X` over `S`.
-* **A4** Points over a field: for `K` a field, `S`-morphisms `Spec K → Conf n X` correspond to
-  `n`-tuples of pairwise distinct `S`-morphisms `Spec K → X`.
+* **A1** [done] `power X n` (the `n`-fold fibre power, the product in `Over S`), the closed partial
+  diagonals `partialDiagonal X n i j = (prᵢ, prⱼ)⁻¹ Δ` (`isClosed_partialDiagonal`, using that
+  `(diag X).left` is a closed immersion), the open complement `opens X n`, the configuration
+  scheme `AlgebraicGeometry.ConfScheme X n : Over S` and its open immersion `ConfScheme.ι`.
+* **A2** [done] `permHom`, `perm`, `permAut : Equiv.Perm (Fin n) →* Aut (ConfScheme X n)`:
+  the `Sₙ`-action by `S`-automorphisms.
+* **A3** [done] `forgetHom`, `forget : ConfScheme X (n+1) ⟶ ConfScheme X n`, equivariance
+  `perm_extendPerm_forget`.
+* **A4** [done] Points: for `T` over `S` reduced with exactly one point (e.g. `Spec K`, `K` a field),
+  `homEquiv : (T ⟶ Conf_n X) ≃ {x : Fin n → (T ⟶ X) // Injective x}` (`homEquivSpec` for
+  `Spec K`); based on `mem_partialDiagonal_of_eq` / `eq_of_mem_partialDiagonal` (the latter uses
+  that a surjective closed immersion onto a reduced scheme is an isomorphism).
+* **A5** [done] Fibres: `toProd : Conf_{n+1} X ⟶ Conf_n X ⨯ X` is an open immersion
+  (`isOpenImmersion_toProd`) with image the complement of the graphs of the `n` tautological
+  sections (`range_toProd`); on field-valued points the fibre of `forget` over `z` is
+  `X ∖ {z₀,…,zₙ₋₁}` (`fiberEquiv`).
 
 ## Out of scope (with reasons)
+
+* **F4** [done] Riemann surfaces (`ChartedSpace ℂ X`): `Conf.fadellNeuwirth_complex`.
 
 * The étale Fadell–Neuwirth / homotopy exact sequence: needs the étale homotopy exact sequence
   for proper/smooth morphisms with geometrically connected fibres (SGA 1 X, XIII), far beyond

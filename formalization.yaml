@@ -14,7 +14,10 @@ project:
     by anabelian reconstruction arguments (Topics in Absolute Anabelian Geometry II).
     The topological layer is complete: configuration spaces, symmetric-group action, forgetful maps
     and fibres, homotopy lifting for locally trivial maps, the fundamental-group sequence of a
-    locally trivial map, and the Fadell–Neuwirth fibration and exact sequence for manifolds.
+    locally trivial map, and the Fadell–Neuwirth fibration and exact sequence for manifolds. The
+    algebraic layer provides configuration schemes of separated S-schemes (open subschemes of fibre
+    powers), the symmetric-group action, forgetful morphisms, Conf_{n+1} as an open subscheme of
+    Conf_n ×_S X, and field-valued points; the étale sequence is not formalised.
   authors:
     - "Claude (Anthropic)"
     - "LANA Project"
@@ -35,7 +38,7 @@ sources:
     authors: ["Shinichi Mochizuki", "Akio Tamagawa"]
     type: "article"
     location: "Hokkaido Math. J. 37 (2008), 75-131"
-    note: "Reference for configuration spaces of curves; the anabelian results are not formalised."
+    note: "Reference for configuration spaces of curves (configuration schemes, ConfScheme); the anabelian results are not formalised."
 
 related_formalizations:
   - id: "https://github.com/lana-agents/iut"
@@ -53,7 +56,9 @@ status:
   scope: >-
     Topological layer complete (configuration spaces, symmetric-group action, forgetful maps and
     fibres, Serre-fibration property of locally trivial maps, fundamental-group sequence, Fadell–Neuwirth
-    fibration and exact sequence for manifolds); algebraic layer in progress; étale sequence not formalised.
+    fibration and exact sequence for manifolds); algebraic layer (configuration schemes, symmetric-group action,
+    forgetful morphisms, open-subscheme description of the fibres, field-valued points) complete; étale
+    homotopy sequence not formalised.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -98,6 +103,31 @@ status:
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
       literature_dependencies: []
+    - declaration: "Conf.fadellNeuwirth_complex"
+      file: "ConfigurationSpaces/Topology/FadellNeuwirth.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "AlgebraicGeometry.ConfScheme.permAut"
+      file: "ConfigurationSpaces/AlgebraicGeometry/Basic.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "AlgebraicGeometry.ConfScheme.isOpenImmersion_toProd"
+      file: "ConfigurationSpaces/AlgebraicGeometry/Basic.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "AlgebraicGeometry.ConfScheme.range_toProd"
+      file: "ConfigurationSpaces/AlgebraicGeometry/Basic.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "AlgebraicGeometry.ConfScheme.homEquiv"
+      file: "ConfigurationSpaces/AlgebraicGeometry/Basic.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
 
 automation:
   methods:
@@ -118,7 +148,9 @@ fidelity:
     Fadell–Neuwirth is proved for Hausdorff topological manifolds modelled on a finite-dimensional real
     normed space (more generally for Hausdorff spaces with local point-pushing homeomorphisms); the
     left-exactness (injectivity of π₁ of the fibre) is stated under the hypothesis π₂(Conf n X) = 0,
-    which is not proved. The étale version is not formalised.
+    which is not proved. The étale version is not formalised. Configuration schemes are defined for separated
+    S-schemes (so that the partial diagonals are closed); field-valued points are described for reduced
+    one-point S-schemes.
 
 review:
   status: "agent-reviewed"

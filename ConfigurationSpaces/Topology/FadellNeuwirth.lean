@@ -7,6 +7,8 @@ import ConfigurationSpaces.Topology.Basic
 import ConfigurationSpaces.Topology.FundamentalGroupSequence
 import ConfigurationSpaces.Topology.Push
 import ConfigurationSpaces.Topology.Punctured
+import Mathlib.LinearAlgebra.Complex.FiniteDimensional
+import Mathlib.Analysis.Complex.Basic
 
 /-!
 # The Fadell–Neuwirth fibration and its fundamental-group sequence
@@ -224,6 +226,24 @@ theorem fadellNeuwirth_injective (h2 : Subsingleton (π_ 2 (Conf n X) (forget x�
     h2).comp (MulEquiv.injective _)
 
 end FadellNeuwirth
+
+/-! ### Riemann surfaces -/
+
+section RiemannSurface
+
+variable [T2Space X] [ConnectedSpace X] [ChartedSpace ℂ X] (x₀ : Conf (n + 1) X)
+
+theorem one_lt_rank_real_complex : 1 < Module.rank ℝ ℂ := by
+  rw [Complex.rank_real_complex]; exact Nat.one_lt_ofNat
+
+/-- **Fadell–Neuwirth for Riemann surfaces** (more generally, connected Hausdorff spaces with a
+`ℂ`-atlas): `π₁(X ∖ {y₀,…,yₙ₋₁}) → π₁(Conf (n+1) X) → π₁(Conf n X) → 1` is exact. -/
+theorem fadellNeuwirth_complex :
+    (puncturedToConf x₀).range = (FundamentalGroup.map forget x₀).ker ∧
+      Surjective (FundamentalGroup.map forget x₀) :=
+  ⟨fadellNeuwirth_range_eq_ker x₀ ℂ, fadellNeuwirth_surjective x₀ ℂ one_lt_rank_real_complex⟩
+
+end RiemannSurface
 
 /-! ### Functoriality on fundamental groups -/
 

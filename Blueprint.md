@@ -153,16 +153,20 @@ For `X : Over S` with separated structure morphism (namespace `AlgebraicGeometry
   connected objects with `H ⋙ F` a fibre functor ⇒ `Aut F → Aut (H ⋙ F)` surjective
   (`PreGaloisCategory.toAut_comp_surjective`, now in
   `pi1/Pi1/Mathlib/CategoryTheory/Galois/FiberAutMap.lean`).
-* **E2** [done, modulo EGA IV 2.4.6] Surjectivity `π₁ᵉᵗ(Conf_{n+1}) ↠ π₁ᵉᵗ(Conf_n)`
-  (`ConfScheme.fundamentalGroupMap_forget_surjective`). Ingredients:
+* **E2** [done] Surjectivity `π₁ᵉᵗ(Conf_{n+1}) ↠ π₁ᵉᵗ(Conf_n)`
+  (`ConfScheme.fundamentalGroupMap_forget_surjective`; unconditional versions
+  `_of_field`, `_of_flat`). Ingredients:
   (1) [done, `pi1`] functoriality of `π₁ᵉᵗ`: `FiniteEtale.pullbackFiberIso`
   (`f^* ⋙ fiber ξ ≅ fiber (ξ ≫ f)`), `FiniteEtale.fundamentalGroupMap` (continuous), `_id`,
   `_comp`;
   (2) [done, `pi1`] connected objects of `FEt(X)` = connected total space
   (`FiniteEtale.isConnected_iff_connectedSpace`); criterion
   `FiniteEtale.fundamentalGroupMap_surjective(_of_geometricallyConnected)`;
-  (3) [done modulo hypothesis] `ConfScheme.universallyOpen_forget` from `[UniversallyOpen X.hom]`;
-  universal openness of smooth `X → S` (EGA IV 2.4.6) is not in Mathlib and stays a hypothesis;
+  (3) [done] `ConfScheme.universallyOpen_forget` from `[UniversallyOpen X.hom]`; the latter is a
+  Mathlib instance for `X → S` flat + lfp (EGA IV 2.4.6, `UniversallyOpen.of_flat`: Chevalley +
+  going-down for flat maps, `isOpenMap_of_generalizingMap`) and for any `X` over a field
+  (EGA IV 2.4.10), giving `fundamentalGroupMap_forget_surjective_of_field/_of_flat` and
+  `connectedSpace_of_field/_of_flat` without that hypothesis;
   (4) [done] scheme-theoretic fibres (`ConfScheme.fiberIso`, `ConfScheme.compl_fiberOpens`,
   `ConfScheme.isPullback_fiberBase`) and their geometric irreducibility/connectedness
   (`ConfScheme.geometricallyIrreducible_forget`, `ConfScheme.geometricallyConnected_forget`) for

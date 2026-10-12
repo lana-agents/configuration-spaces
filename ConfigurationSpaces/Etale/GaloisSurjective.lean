@@ -28,9 +28,15 @@ open subschemes `X_K ∖ {z₀, …, zₙ₋₁}`, hence geometrically irreducib
 
 **Theorem** (`ConfScheme.fundamentalGroupMap_forget_surjective`). Let `S` be connected and `X` a
 separated `S`-scheme such that `X ⟶ S` is universally open with irreducible infinite geometric
-fibres (e.g. a geometrically irreducible curve over a field, granting universal openness, which is
-EGA IV 2.4.6 / 2.4.10 and not in Mathlib). Then `π₁ᵉᵗ(Conf_{n+1}(X), ξ) → π₁ᵉᵗ(Conf_n(X), ξ')`
-is surjective for every geometric point `ξ` of `Conf_{n+1}(X)`.
+fibres. Then `π₁ᵉᵗ(Conf_{n+1}(X), ξ) → π₁ᵉᵗ(Conf_n(X), ξ')` is surjective for every geometric
+point `ξ` of `Conf_{n+1}(X)`.
+
+Universal openness of `X ⟶ S` is automatic in the cases of interest, by Mathlib instances:
+over a field (EGA IV 2.4.10, any `X`), and for `X ⟶ S` flat and locally of finite presentation
+(EGA IV 2.4.6, `AlgebraicGeometry.UniversallyOpen.of_flat`). This gives the unconditional
+corollaries `ConfScheme.fundamentalGroupMap_forget_surjective_of_field` (e.g. `X` a geometrically
+irreducible curve over a field `k`, smooth or not, with no finiteness assumption) and
+`ConfScheme.fundamentalGroupMap_forget_surjective_of_flat`.
 -/
 
 universe u
@@ -53,5 +59,25 @@ theorem fundamentalGroupMap_forget_surjective [ConnectedSpace S] [UniversallyOpe
   haveI := geometricallyConnected_forget n hX
   haveI := universallyOpen_forget X n
   exact FiniteEtale.fundamentalGroupMap_surjective_of_geometricallyConnected _ h
+
+/-- **Surjectivity of `π₁ᵉᵗ(Conf_{n+1}(X)) → π₁ᵉᵗ(Conf_n(X))` over a field**: for `X` a separated
+scheme over a field `k` whose geometric fibre is irreducible and infinite (e.g. a geometrically
+irreducible curve). No universal openness hypothesis: it holds over a field (EGA IV 2.4.10). -/
+theorem fundamentalGroupMap_forget_surjective_of_field {k : Type u} [Field k]
+    {X : Over (Spec (.of k))} [IsSeparated X.hom] (hX : geometrically GeomIrreducibleInfinite X.hom)
+    (n : ℕ) {Ω : Type u} [Field Ω] [IsSepClosed Ω] (ξ : Spec (.of Ω) ⟶ (ConfScheme X (n + 1)).left)
+    {η : Spec (.of Ω) ⟶ (ConfScheme X n).left} (h : ξ ≫ (forget X n).left = η) :
+    Function.Surjective (FiniteEtale.fundamentalGroupMap (forget X n).left h) :=
+  fundamentalGroupMap_forget_surjective hX n ξ h
+
+/-- **Surjectivity of `π₁ᵉᵗ(Conf_{n+1}(X)) → π₁ᵉᵗ(Conf_n(X))`** for `S` connected and `X ⟶ S`
+flat, locally of finite presentation and separated with irreducible infinite geometric fibres
+(universal openness is EGA IV 2.4.6, `UniversallyOpen.of_flat`). -/
+theorem fundamentalGroupMap_forget_surjective_of_flat [ConnectedSpace S] [Flat X.hom]
+    [LocallyOfFinitePresentation X.hom] (hX : geometrically GeomIrreducibleInfinite X.hom) (n : ℕ)
+    {Ω : Type u} [Field Ω] [IsSepClosed Ω] (ξ : Spec (.of Ω) ⟶ (ConfScheme X (n + 1)).left)
+    {η : Spec (.of Ω) ⟶ (ConfScheme X n).left} (h : ξ ≫ (forget X n).left = η) :
+    Function.Surjective (FiniteEtale.fundamentalGroupMap (forget X n).left h) :=
+  fundamentalGroupMap_forget_surjective hX n ξ h
 
 end AlgebraicGeometry.ConfScheme

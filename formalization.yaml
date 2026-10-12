@@ -73,8 +73,9 @@ status:
     forgetful morphisms, open-subscheme description of the fibres, field-valued points) complete;
     pi_2(Conf_n X) = 0 and the short exact Fadell–Neuwirth sequence for Hausdorff spaces covered by
     open subsets of C (plane domains, complex tori, once-punctured elliptic curves); étale layer:
-    fibres of forget, π₁ᵉᵗ(Conf_{n+1}) ↠ π₁ᵉᵗ(Conf_n) under the hypothesis UniversallyOpen X.hom
-    (EGA IV 2.4.6, not in Mathlib); exactness of the étale sequence not formalised.
+    fibres of forget, π₁ᵉᵗ(Conf_{n+1}) ↠ π₁ᵉᵗ(Conf_n) for X → S universally open, unconditionally
+    over a field (EGA IV 2.4.10) or for X → S flat lfp (EGA IV 2.4.6, both via Mathlib instances);
+    exactness of the étale sequence not formalised.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -219,8 +220,9 @@ fidelity:
     of genus ≥ 2, abstract Riemann surfaces) the uniformising covering must be supplied, since
     general uniformisation is not formalised, and in general it is stated under the hypothesis
     π₂(Conf n X) = 0. Étale version: only the surjectivity π₁ᵉᵗ(Conf_{n+1}) ↠ π₁ᵉᵗ(Conf_n) is
-    formalised, under the explicit hypotheses that X → S is universally open (EGA IV 2.4.6, not in
-    Mathlib) and has irreducible infinite geometric fibres; exactness in the middle and on the left
+    formalised, for X → S universally open (automatic over a field, EGA IV 2.4.10, and for flat
+    X → S locally of finite presentation, EGA IV 2.4.6; both Mathlib instances) with irreducible
+    infinite geometric fibres; exactness in the middle and on the left
     (SGA 1 X/XIII) is missing. Configuration schemes are defined for separated
     S-schemes (so that the partial diagonals are closed); field-valued points are described for reduced
     one-point S-schemes.

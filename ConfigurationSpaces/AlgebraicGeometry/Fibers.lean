@@ -31,9 +31,16 @@ is a non-empty open subscheme of an irreducible scheme, hence irreducible:
   restriction of the projection `Conf_n(X) ×_S X ⟶ Conf_n(X)` to an open subscheme);
 * `ConfScheme.connectedSpace_succ`: if `Conf_n(X)` is connected, so is `Conf_{n+1}(X)`.
 
-Universal openness of `X ⟶ S` (EGA IV 2.4.6: flat and locally of finite presentation morphisms
-are universally open; every scheme over a field is universally open over it, EGA IV 2.4.10) is not
-in Mathlib; it is kept as the hypothesis `[UniversallyOpen X.hom]`.
+The results above are stated under the hypothesis `[UniversallyOpen X.hom]`, which Mathlib
+discharges automatically in the cases of interest:
+
+* `AlgebraicGeometry.UniversallyOpen.of_flat` (EGA IV 2.4.6, Stacks 01UA): flat morphisms locally
+  of finite presentation are universally open;
+* the instance for morphisms to an integral one-point scheme (EGA IV 2.4.10): every scheme over a
+  field `k` is universally open over `Spec k` (no finiteness needed).
+
+Accordingly `ConfScheme.connectedSpace_of_field` and `ConfScheme.connectedSpace_of_flat` carry no
+universal openness hypothesis.
 -/
 
 open CategoryTheory Limits
@@ -278,6 +285,23 @@ theorem connectedSpace [ConnectedSpace S] [UniversallyOpen X.hom]
   | n + 1 => by
     haveI := connectedSpace hX n
     exact connectedSpace_succ n hX
+
+/-- Over a field `k`, if the geometric fibre of `X ⟶ Spec k` is irreducible and infinite (e.g. `X`
+a geometrically irreducible curve), all configuration schemes `Conf_n(X)` are connected. Universal
+openness of `X ⟶ Spec k` is automatic (EGA IV 2.4.10). -/
+theorem connectedSpace_of_field {k : Type u} [Field k] {X : Over (Spec (.of k))}
+    [IsSeparated X.hom] (hX : geometrically GeomIrreducibleInfinite X.hom) (n : ℕ) :
+    ConnectedSpace (ConfScheme X n).left :=
+  connectedSpace hX n
+
+variable {X} in
+/-- For `S` connected and `X ⟶ S` flat and locally of finite presentation with irreducible
+infinite geometric fibres, all configuration schemes `Conf_n(X)` are connected. Universal openness
+of `X ⟶ S` is automatic (EGA IV 2.4.6). -/
+theorem connectedSpace_of_flat [ConnectedSpace S] [Flat X.hom] [LocallyOfFinitePresentation X.hom]
+    (hX : geometrically GeomIrreducibleInfinite X.hom) (n : ℕ) :
+    ConnectedSpace (ConfScheme X n).left :=
+  connectedSpace hX n
 
 end ConfScheme
 

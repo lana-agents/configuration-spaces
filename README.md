@@ -89,7 +89,9 @@ Formalised (`ConfigurationSpaces/AlgebraicGeometry/Fibers.lean`), for `X` separa
   `forget` is geometrically irreducible and geometrically connected
   (`ConfScheme.geometricallyIrreducible_forget`, `ConfScheme.geometricallyConnected_forget`);
 * `forget` is universally open if `X → S` is (`ConfScheme.universallyOpen_forget`), and then all
-  `Conf_n(X)` are connected for connected `S` (`ConfScheme.connectedSpace`).
+  `Conf_n(X)` are connected for connected `S` (`ConfScheme.connectedSpace`; automatic over a
+  field or for flat lfp `X → S`: `ConfScheme.connectedSpace_of_field`,
+  `ConfScheme.connectedSpace_of_flat`).
 
 Formalised (`ConfigurationSpaces/Etale/GaloisSurjective.lean`, using `lana-agents/pi1`):
 **`π₁ᵉᵗ(Conf_{n+1}(X), ξ) ↠ π₁ᵉᵗ(Conf_n(X), ξ ≫ forget)`** (SGA 1 V.6.9;
@@ -99,10 +101,19 @@ with irreducible infinite geometric fibres. The Galois-theoretic and functoriali
 `FiniteEtale.isConnected_iff_connectedSpace`,
 `FiniteEtale.fundamentalGroupMap_surjective_of_geometricallyConnected`;
 `Pi1/Mathlib/CategoryTheory/Galois/FiberAutMap.lean`: `PreGaloisCategory.toAut_comp_surjective`,
-moved there from this repository). The only hypothesis not discharged for a smooth curve over a
-field is `[UniversallyOpen X.hom]` (EGA IV 2.4.6: flat + locally of finite presentation ⇒
-universally open; or EGA IV 2.4.10: every scheme over a field is universally open over it); this
-is not in Mathlib.
+moved there from this repository). Universal openness of `X → S` is supplied by Mathlib
+instances: EGA IV 2.4.6 (flat + locally of finite presentation ⇒ universally open,
+`AlgebraicGeometry.UniversallyOpen.of_flat`, Stacks 01UA, proved via Chevalley + going-down) and
+EGA IV 2.4.10 (every morphism to an integral one-point scheme, e.g. `X → Spec k`, is universally
+open). Hence the unconditional corollaries
+`ConfScheme.fundamentalGroupMap_forget_surjective_of_field` (any separated `X` over a field `k` with
+irreducible infinite geometric fibre, e.g. a geometrically irreducible curve, smooth or not, without
+finiteness assumptions), `ConfScheme.fundamentalGroupMap_forget_surjective_of_flat` (`X → S` flat,
+locally of finite presentation), and `ConfScheme.connectedSpace_of_field` /
+`ConfScheme.connectedSpace_of_flat`. The remaining hypothesis is the geometric one,
+`geometrically ConfScheme.GeomIrreducibleInfinite X.hom` (geometric irreducibility plus infinitude
+of the geometric fibres; deducing infinitude from "curve" would need dimension theory of schemes
+of finite type over a field, which is not developed in Mathlib).
 
 Scope of the asphericity results: they cover exactly the Hausdorff spaces `X` that admit a
 surjective covering map from a space embedding openly in `ℂ` and are given together with that
@@ -122,8 +133,8 @@ Not formalised (out of scope; reasons):
   étale divisors in smooth proper curves) together with SGA 1 X.1.4 (homotopy exact sequence for
   proper separable morphisms) and, over `ℂ`, the comparison with the topological sequence via the
   Riemann existence theorem (SGA 1 XII); none of this is in Mathlib or `lana-agents/pi1`. The
-  surjectivity on the right is formalised (see above), up to universal openness of `X → S`
-  (EGA IV 2.4.6 / 2.4.10, not in Mathlib), which is kept as a hypothesis.
+  surjectivity on the right is formalised (see above), unconditionally (in universal openness)
+  over a field or for flat `X → S` locally of finite presentation.
 
 No lana-agents repository depends on this one: `iut` and its pinned lana-agents
 dependencies do not `require` it.

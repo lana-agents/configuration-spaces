@@ -6,8 +6,9 @@ Ordered configuration spaces of curves and their fundamental-group sequences.
 
 **Topological and algebraic layers complete, including the full (left-exact) Fadell–Neuwirth
 sequence for surfaces covered by plane domains (in particular once-punctured elliptic curves and
-punctured complex planes); étale sequence not formalised (only its Galois-theoretic surjectivity
-criterion).** Everything listed below is proved
+punctured complex planes); étale layer: scheme-theoretic fibres of `forget`, their geometric
+irreducibility, and the surjectivity `π₁ᵉᵗ(Conf_{n+1}) ↠ π₁ᵉᵗ(Conf_n)` (granting universal openness
+of `X → S`); exactness of the étale sequence in the middle and on the left not formalised.** Everything listed below is proved
 without `sorry`, `admit` or new axioms (only `propext`, `Classical.choice`, `Quot.sound`). The
 lemma-level plan and its status are in [`Blueprint.md`](Blueprint.md).
 
@@ -75,10 +76,33 @@ Formalised (`ConfigurationSpaces/AlgebraicGeometry/Basic.lean`), for `X` separat
   pairwise distinct points (`ConfScheme.homEquiv`, `ConfScheme.homEquivSpec`), and the fibre of
   `forget` over such a point `z` is `X ∖ {z₀,…,zₙ₋₁}` on points (`ConfScheme.fiberEquiv`).
 
-Formalised (`ConfigurationSpaces/Etale/GaloisSurjective.lean`): the Galois-theoretic half of
-SGA 1 V.6.9: for a fibre functor `F` on a Galois category `C` and `H : D ⥤ C` with `H ⋙ F` a
-fibre functor, if `H` preserves connected objects then `Aut F → Aut (H ⋙ F)` is surjective
-(`PreGaloisCategory.toAut_comp_surjective`).
+Formalised (`ConfigurationSpaces/AlgebraicGeometry/Fibers.lean`), for `X` separated over `S`:
+
+* **scheme-theoretic fibres of `forget`**: for `z : Spec K ⟶ Conf_n(X)`, the fibre
+  `Conf_{n+1}(X) ×_{Conf_n(X)} Spec K` is isomorphic to the open subscheme `ConfScheme.fiberOpens z`
+  of `X_K` (`ConfScheme.fiberIso`; `ConfScheme.isPullback_fiberBase` identifies the ambient scheme
+  with `X ×_S Spec K`), whose complement is the union of the images of the `n` tautological
+  sections `Spec K ⟶ X_K` (`ConfScheme.compl_fiberOpens`), i.e. `X_K ∖ {z₀, …, zₙ₋₁}`;
+* if the geometric fibres of `X → S` are irreducible and infinite
+  (`geometrically ConfScheme.GeomIrreducibleInfinite X.hom`, e.g. a geometrically irreducible curve
+  over a field), these fibres are non-empty open subschemes of irreducible schemes, hence
+  `forget` is geometrically irreducible and geometrically connected
+  (`ConfScheme.geometricallyIrreducible_forget`, `ConfScheme.geometricallyConnected_forget`);
+* `forget` is universally open if `X → S` is (`ConfScheme.universallyOpen_forget`), and then all
+  `Conf_n(X)` are connected for connected `S` (`ConfScheme.connectedSpace`).
+
+Formalised (`ConfigurationSpaces/Etale/GaloisSurjective.lean`, using `lana-agents/pi1`):
+**`π₁ᵉᵗ(Conf_{n+1}(X), ξ) ↠ π₁ᵉᵗ(Conf_n(X), ξ ≫ forget)`** (SGA 1 V.6.9;
+`ConfScheme.fundamentalGroupMap_forget_surjective`) for connected `S` and `X → S` universally open
+with irreducible infinite geometric fibres. The Galois-theoretic and functoriality input is in
+`pi1` (`Pi1/FundamentalGroup/Functoriality.lean`: `FiniteEtale.fundamentalGroupMap`,
+`FiniteEtale.isConnected_iff_connectedSpace`,
+`FiniteEtale.fundamentalGroupMap_surjective_of_geometricallyConnected`;
+`Pi1/Mathlib/CategoryTheory/Galois/FiberAutMap.lean`: `PreGaloisCategory.toAut_comp_surjective`,
+moved there from this repository). The only hypothesis not discharged for a smooth curve over a
+field is `[UniversallyOpen X.hom]` (EGA IV 2.4.6: flat + locally of finite presentation ⇒
+universally open; or EGA IV 2.4.10: every scheme over a field is universally open over it); this
+is not in Mathlib.
 
 Scope of the asphericity results: they cover exactly the Hausdorff spaces `X` that admit a
 surjective covering map from a space embedding openly in `ℂ` and are given together with that
@@ -97,20 +121,9 @@ Not formalised (out of scope; reasons):
   connected fibres, i.e. SGA 1 XIII 4.1–4.3 (tame fundamental groups of complements of relative
   étale divisors in smooth proper curves) together with SGA 1 X.1.4 (homotopy exact sequence for
   proper separable morphisms) and, over `ℂ`, the comparison with the topological sequence via the
-  Riemann existence theorem (SGA 1 XII); none of this is in Mathlib or `lana-agents/pi1`. Even
-  the surjectivity `π₁ᵉᵗ(Conf_{n+1} X) ↠ π₁ᵉᵗ(Conf_n X)` (SGA 1 IX.3.4 / V.6.9 for a universally
-  open morphism with geometrically connected fibres) needs, beyond
-  `PreGaloisCategory.toAut_comp_surjective` and Mathlib's `GeometricallyConnected` API:
-  (1) functoriality of `π₁ᵉᵗ` in `pi1`: the isomorphism `f^* ⋙ fiber ξ ≅ fiber (ξ ≫ f)` and the
-  `FiberFunctor` structure on `f^* ⋙ fiber ξ` (not provided by `pi1`, which defines `π₁ᵉᵗ(ξ)` as
-  `Aut (fiber ξ)` for a single scheme); (2) connected objects of the Galois category of finite
-  étale `X`-schemes are exactly those with connected total space (not in `pi1`);
-  (3) universal openness of `Conf_{n+1} X → Conf_n X`, a base change of `X → S` composed with an
-  open immersion — for smooth (flat, locally finitely presented) `X → S` this is EGA IV 2.4.6,
-  not in Mathlib; (4) the scheme-theoretic fibre of `forget` over `Spec K → Conf_n X` as the open
-  subscheme of `X_K` complementary to `n` rational points, and its connectedness for
-  geometrically irreducible `X → S` of relative dimension `≥ 1` (this repository describes the
-  fibres only on field-valued points, `ConfScheme.fiberEquiv`).
+  Riemann existence theorem (SGA 1 XII); none of this is in Mathlib or `lana-agents/pi1`. The
+  surjectivity on the right is formalised (see above), up to universal openness of `X → S`
+  (EGA IV 2.4.6 / 2.4.10, not in Mathlib), which is kept as a hypothesis.
 
 No lana-agents repository depends on this one: `iut` and its pinned lana-agents
 dependencies do not `require` it.
@@ -148,7 +161,11 @@ Lean 4 project pinned to `leanprover/lean4:v4.32.0` with Mathlib at `v4.32.0`
 pinned by `orbicurve-cores`), for the plane uniformisation theorem used in `PlanarDomain.lean`;
 it pulls in `lana-agents/heights` at `3539e2a` (same Mathlib commit). Only the 16 `oka` and 7
 `heights` modules imported by `Oka.Uniformization.LatticeComplement` are built (about 190 MB for
-both packages including sources and build output).
+both packages including sources and build output). The third direct dependency is
+[`lana-agents/pi1`](https://github.com/lana-agents/pi1) pinned at its `master` commit `94acf94`
+(same Mathlib commit), for the étale fundamental group, its functoriality and the SGA 1 V.6.9
+surjectivity criterion used in `Etale/GaloisSurjective.lean`; only the `pi1` modules imported
+there (`Pi1.FundamentalGroup.Functoriality` and its dependencies) are built.
 Library sources live under `ConfigurationSpaces/`, and every file must be imported from
 the root module `ConfigurationSpaces.lean`.
 

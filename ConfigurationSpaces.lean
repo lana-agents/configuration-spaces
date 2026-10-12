@@ -1,4 +1,5 @@
 import ConfigurationSpaces.AlgebraicGeometry.Basic
+import ConfigurationSpaces.AlgebraicGeometry.Fibers
 import ConfigurationSpaces.Etale.GaloisSurjective
 import ConfigurationSpaces.Topology.Aspherical
 import ConfigurationSpaces.Topology.Basic

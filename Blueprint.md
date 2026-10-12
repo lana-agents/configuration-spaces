@@ -147,16 +147,27 @@ For `X : Over S` with separated structure morphism (namespace `AlgebraicGeometry
   uniformisation is not formalised, so for other hyperbolic surfaces (e.g. compact of genus
   `≥ 2`) the covering must be supplied.
 
-## E. Étale layer — `ConfigurationSpaces/Etale/GaloisSurjective.lean`
+## E. Étale layer — `ConfigurationSpaces/Etale/GaloisSurjective.lean`, `AlgebraicGeometry/Fibers.lean`
 
-* **E1** [done] SGA 1 V.6.9 (Galois-theoretic part): `H : D ⥤ C` preserving connected objects with
-  `H ⋙ F` a fibre functor ⇒ `Aut F → Aut (H ⋙ F)` surjective
-  (`PreGaloisCategory.toAut_comp_surjective`).
-* **E2** [out of scope] Surjectivity `π₁ᵉᵗ(Conf_{n+1}) ↠ π₁ᵉᵗ(Conf_n)`: needs (1) functoriality of
-  `π₁ᵉᵗ` in `pi1` (`f^* ⋙ fiber ξ ≅ fiber (ξ ≫ f)`, fibre-functor structure on `f^* ⋙ fiber ξ`);
-  (2) connected objects of `FEt(X)` = connected finite étale `X`-schemes (not in `pi1`);
-  (3) universal openness of `forget` (EGA IV 2.4.6 for smooth `X → S`, not in Mathlib);
-  (4) scheme-theoretic fibres of `forget` and their geometric connectedness.
+* **E1** [done, moved to `pi1`] SGA 1 V.6.9 (Galois-theoretic part): `H : D ⥤ C` preserving
+  connected objects with `H ⋙ F` a fibre functor ⇒ `Aut F → Aut (H ⋙ F)` surjective
+  (`PreGaloisCategory.toAut_comp_surjective`, now in
+  `pi1/Pi1/Mathlib/CategoryTheory/Galois/FiberAutMap.lean`).
+* **E2** [done, modulo EGA IV 2.4.6] Surjectivity `π₁ᵉᵗ(Conf_{n+1}) ↠ π₁ᵉᵗ(Conf_n)`
+  (`ConfScheme.fundamentalGroupMap_forget_surjective`). Ingredients:
+  (1) [done, `pi1`] functoriality of `π₁ᵉᵗ`: `FiniteEtale.pullbackFiberIso`
+  (`f^* ⋙ fiber ξ ≅ fiber (ξ ≫ f)`), `FiniteEtale.fundamentalGroupMap` (continuous), `_id`,
+  `_comp`;
+  (2) [done, `pi1`] connected objects of `FEt(X)` = connected total space
+  (`FiniteEtale.isConnected_iff_connectedSpace`); criterion
+  `FiniteEtale.fundamentalGroupMap_surjective(_of_geometricallyConnected)`;
+  (3) [done modulo hypothesis] `ConfScheme.universallyOpen_forget` from `[UniversallyOpen X.hom]`;
+  universal openness of smooth `X → S` (EGA IV 2.4.6) is not in Mathlib and stays a hypothesis;
+  (4) [done] scheme-theoretic fibres (`ConfScheme.fiberIso`, `ConfScheme.compl_fiberOpens`,
+  `ConfScheme.isPullback_fiberBase`) and their geometric irreducibility/connectedness
+  (`ConfScheme.geometricallyIrreducible_forget`, `ConfScheme.geometricallyConnected_forget`) for
+  `X → S` with irreducible infinite geometric fibres; connectedness of all `Conf_n`
+  (`ConfScheme.connectedSpace`).
 * **E3** [out of scope] Exactness in the middle and on the left: SGA 1 XIII 4.1–4.3 (tame
   homotopy exact sequence for complements of relative étale divisors), SGA 1 X.1.4, and over `ℂ`
   the Riemann existence theorem (SGA 1 XII); none available in Mathlib or `pi1`.
@@ -165,6 +176,6 @@ For `X : Over S` with separated structure morphism (namespace `AlgebraicGeometry
 
 * **F4** [done] Riemann surfaces (`ChartedSpace ℂ X`): `Conf.fadellNeuwirth_complex`.
 
-* The étale Fadell–Neuwirth / homotopy exact sequence: see **E2**, **E3**.
+* The étale Fadell–Neuwirth / homotopy exact sequence beyond surjectivity: see **E3**.
 * Asphericity for hyperbolic surfaces not given with a covering by a plane domain (general
   uniformisation), and for real surfaces that are not Riemann surfaces: see **U4**.

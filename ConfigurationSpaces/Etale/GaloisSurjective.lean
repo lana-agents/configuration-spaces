@@ -3,62 +3,55 @@ Copyright (c) 2026 LANA Project. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: LANA Project
 -/
-import Mathlib.CategoryTheory.Galois.IsFundamentalgroup
-import Mathlib.CategoryTheory.Galois.Prorepresentability
-import Mathlib.CategoryTheory.Galois.Topology
+import Pi1.Mathlib.CategoryTheory.Galois.FiberAutMap
+import Pi1.FundamentalGroup.Functoriality
+import ConfigurationSpaces.AlgebraicGeometry.Fibers
 
 /-!
-# Surjectivity of induced maps of fundamental groups of Galois categories
+# Surjectivity of `π₁ᵉᵗ(Conf_{n+1}(X)) → π₁ᵉᵗ(Conf_n(X))`
 
-Let `F` be a fibre functor on a Galois category `C` and `H : D ⥤ C` a functor from a Galois
-category `D` such that `H ⋙ F` is again a fibre functor. Then `Aut F` acts on the fibres of
-`H ⋙ F`, which gives the homomorphism `Aut F →* Aut (H ⋙ F)`, `σ ↦ σ ◫ H` (whiskering).
+The Galois-theoretic input (SGA 1 V.6.9) lives in `lana-agents/pi1`:
 
-**Theorem** (`PreGaloisCategory.toAut_comp_surjective`, SGA 1 V.6.9, "if" direction). If `H`
-sends connected objects to connected objects, then `Aut F → Aut (H ⋙ F)` is surjective.
+* `CategoryTheory.PreGaloisCategory.toAut_comp_surjective`,
+  `PreGaloisCategory.fiberAutMap_surjective` (`Pi1/Mathlib/CategoryTheory/Galois/FiberAutMap`):
+  if `H : D ⥤ C` sends connected objects to connected objects, `Aut F → Aut (H ⋙ F)` is
+  surjective (this file used to contain these; they were moved to `pi1`);
+* `AlgebraicGeometry.FiniteEtale.fundamentalGroupMap f h : π₁ᵉᵗ(ξ) →ₜ* π₁ᵉᵗ(η)` for
+  `f : Y ⟶ X`, `ξ ≫ f = η`, and `fundamentalGroupMap_surjective_of_geometricallyConnected`: for
+  `f` universally open with geometrically connected fibres between connected schemes it is
+  surjective (`Pi1/FundamentalGroup/Functoriality`).
 
-Proof: `Aut F` is compact and acts continuously on all fibres, and it acts transitively on the
-fibre of every connected object of `C`, in particular on `F (H Y)` for connected `Y : D`
-(`FiberFunctor.isPretransitive_of_isConnected`); conclude by
-`PreGaloisCategory.toAut_surjective_of_isPretransitive`.
+The geometric input for `forget : Conf_{n+1}(X) ⟶ Conf_n(X)` is
+`ConfigurationSpaces/AlgebraicGeometry/Fibers.lean`: its fibres over field-valued points are the
+open subschemes `X_K ∖ {z₀, …, zₙ₋₁}`, hence geometrically irreducible when the geometric fibres of
+`X ⟶ S` are irreducible and infinite, and `forget` is universally open when `X ⟶ S` is.
 
-For the étale fundamental group (`lana-agents/pi1`: `π₁ᵉᵗ(ξ) = Aut (fiber ξ)` on the Galois
-category of finite étale `X`-schemes) and a morphism `f : X ⟶ Y`, this is the Galois-theoretic
-half of the surjectivity of `π₁ᵉᵗ(X, ξ) → π₁ᵉᵗ(Y, f ∘ ξ)`, with `H` the pullback functor
-`f^*`. The geometric half — `f^*` preserves connectedness when `f` is universally open with
-geometrically connected fibres, and the identification `f^* ⋙ fiber ξ ≅ fiber (ξ ≫ f)` — is not
-formalised here; see the README for what is missing to apply this to
-`Conf_{n+1}(X) → Conf_n(X)`.
+**Theorem** (`ConfScheme.fundamentalGroupMap_forget_surjective`). Let `S` be connected and `X` a
+separated `S`-scheme such that `X ⟶ S` is universally open with irreducible infinite geometric
+fibres (e.g. a geometrically irreducible curve over a field, granting universal openness, which is
+EGA IV 2.4.6 / 2.4.10 and not in Mathlib). Then `π₁ᵉᵗ(Conf_{n+1}(X), ξ) → π₁ᵉᵗ(Conf_n(X), ξ')`
+is surjective for every geometric point `ξ` of `Conf_{n+1}(X)`.
 -/
 
-universe u₁ u₂ u₃ u₄
+universe u
 
-namespace CategoryTheory.PreGaloisCategory
+open CategoryTheory
 
-variable {C : Type u₁} [Category.{u₂} C] {D : Type u₃} [Category.{u₄} D]
-  (F : C ⥤ FintypeCat.{u₂}) (H : D ⥤ C)
+namespace AlgebraicGeometry.ConfScheme
 
-/-- `Aut F` acts on the fibres of `H ⋙ F`. -/
-instance mulActionComp (Y : D) : MulAction (Aut F) ((H ⋙ F).obj Y) :=
-  inferInstanceAs (MulAction (Aut F) (F.obj (H.obj Y)))
+variable {S : Scheme.{u}} {X : Over S} [IsSeparated X.hom]
 
-instance : IsNaturalSMul (H ⋙ F) (Aut F) where
-  naturality σ _ _ f x := (mulAction_naturality F σ (H.map f) x).symm
+/-- **Surjectivity of `π₁ᵉᵗ(Conf_{n+1}(X)) → π₁ᵉᵗ(Conf_n(X))`** (SGA 1 V.6.9), for `S` connected
+and `X ⟶ S` universally open with irreducible infinite geometric fibres. -/
+theorem fundamentalGroupMap_forget_surjective [ConnectedSpace S] [UniversallyOpen X.hom]
+    (hX : geometrically GeomIrreducibleInfinite X.hom) (n : ℕ) {Ω : Type u} [Field Ω]
+    [IsSepClosed Ω] (ξ : Spec (.of Ω) ⟶ (ConfScheme X (n + 1)).left)
+    {η : Spec (.of Ω) ⟶ (ConfScheme X n).left} (h : ξ ≫ (forget X n).left = η) :
+    Function.Surjective (FiniteEtale.fundamentalGroupMap (forget X n).left h) := by
+  haveI := connectedSpace hX n
+  haveI := connectedSpace hX (n + 1)
+  haveI := geometricallyConnected_forget n hX
+  haveI := universallyOpen_forget X n
+  exact FiniteEtale.fundamentalGroupMap_surjective_of_geometricallyConnected _ h
 
-/-- The homomorphism `Aut F →* Aut (H ⋙ F)` is whiskering with `H`. -/
-theorem toAut_comp_hom_app (σ : Aut F) (Y : D) :
-    (toAut (H ⋙ F) (Aut F) σ).hom.app Y = σ.hom.app (H.obj Y) := by
-  ext x
-  exact toAut_hom_app_apply (H ⋙ F) σ x
-
-/-- **SGA 1 V.6.9 (Galois-theoretic part).** If `H : D ⥤ C` sends connected objects to connected
-objects and `H ⋙ F` is a fibre functor, then `Aut F → Aut (H ⋙ F)` is surjective. -/
-theorem toAut_comp_surjective [GaloisCategory C] [FiberFunctor F] [GaloisCategory D]
-    [FiberFunctor (H ⋙ F)] (hH : ∀ Y : D, IsConnected Y → IsConnected (H.obj Y)) :
-    Function.Surjective (toAut (H ⋙ F) (Aut F)) := by
-  haveI (Y : D) : ContinuousSMul (Aut F) ((H ⋙ F).obj Y) := continuousSMul_aut_fiber F (H.obj Y)
-  refine toAut_surjective_of_isPretransitive (H ⋙ F) (Aut F) fun Y _ ↦ ?_
-  haveI := hH Y inferInstance
-  exact FiberFunctor.isPretransitive_of_isConnected F (H.obj Y)
-
-end CategoryTheory.PreGaloisCategory
+end AlgebraicGeometry.ConfScheme
